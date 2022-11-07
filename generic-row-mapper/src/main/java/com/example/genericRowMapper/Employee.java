@@ -11,5 +11,6 @@ import lombok.*;
 public class Employee {
     int id;
     String phonenumber;
+    String name;
     Amount amount;
 }

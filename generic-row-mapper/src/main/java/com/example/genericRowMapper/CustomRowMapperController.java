@@ -27,6 +27,7 @@ public class CustomRowMapperController {
     public ResponseEntity<List<Employee>> testGet(){
         BeanPropertyRowMapper rowMapper = BeanPropertyRowMapper.newInstance(Employee.class);
         List<Employee> employees = namedParameterJdbcTemplate.query("SELECT * FROM employee", new NestedRowMapper(Employee.class));
+
         return ResponseEntity.ok().body(employees);
     }
 }
