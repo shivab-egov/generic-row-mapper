@@ -20,30 +20,7 @@ public class GenericRowMapper<T> implements RowMapper<T> {
 
     @Override
     public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-        // see if able to instantiate the class
-        T mappedObject = BeanUtils.instantiateClass(mappedClass);
-        log.info(mappedObject.toString());
-        // see if able to distinguish the nested fields
-        Field[] fields = mappedObject.getClass().getDeclaredFields();
-        for (Field f : fields) {
-            f.setAccessible(true);
-            if (!f.getType().isPrimitive() && !isWrapper(f)) {
-                log.info(f.getName());
-                // instantiate
-                Object mappedNestedObject = BeanUtils.instantiateClass(f.getType());
-                log.info(mappedNestedObject.toString());
-                // check if instantiation is by reference
-                log.info(mappedObject.toString());
-                // set the newly instantiated object on the parent
-                try {
-                    f.set(mappedObject, mappedNestedObject);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-                // check if nested object has been set on the parent object
-                log.info(mappedObject.toString());
-            }
-        }
+        log.info(instantiate(mappedClass).toString());
         return null;
     }
 
@@ -52,5 +29,23 @@ public class GenericRowMapper<T> implements RowMapper<T> {
         return (type == Double.class || type == Float.class || type == Long.class ||
                 type == Integer.class || type == Short.class || type == Character.class ||
                 type == Byte.class || type == Boolean.class || type == String.class);
+    }
+
+    private Object instantiate(Class<?> clazz) {
+        Object mappedObject = BeanUtils.instantiateClass(clazz);
+        log.info(mappedObject.toString());
+        Field[] fields = mappedObject.getClass().getDeclaredFields();
+        for (Field f : fields) {
+            f.setAccessible(true);
+            if (!f.getType().isPrimitive() && !isWrapper(f)) {
+                Object mappedNestedObject = instantiate(f.getType());
+                try {
+                    f.set(mappedObject, mappedNestedObject);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return mappedObject;
     }
 }
