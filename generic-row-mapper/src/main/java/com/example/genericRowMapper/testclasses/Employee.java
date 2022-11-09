@@ -1,4 +1,4 @@
-package com.example.genericRowMapper;
+package com.example.genericRowMapper.testclasses;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.example.genericRowMapper;
+package com.example.genericRowMapper.testclasses;
 
 import lombok.*;
 
@@ -10,4 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 public class Amount {
     int price;
+    Currency currency;
 }

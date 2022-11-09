@@ -1,9 +1,10 @@
 package com.example.genericRowMapper;
 
+import com.example.genericRowMapper.testclasses.Employee;
+import com.example.genericRowMapper.testclasses.Employee2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +24,16 @@ public class CustomRowMapperController {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    @GetMapping()
+    @GetMapping("/test1")
     public ResponseEntity<List<Employee>> testGet(){
-        BeanPropertyRowMapper rowMapper = BeanPropertyRowMapper.newInstance(Employee.class);
         List<Employee> employees = namedParameterJdbcTemplate.query("SELECT * FROM employee", new NestedRowMapper(Employee.class));
+
+        return ResponseEntity.ok().body(employees);
+    }
+
+    @GetMapping("/test2")
+    public ResponseEntity<List<Employee>> testGet2(){
+        List<Employee> employees = namedParameterJdbcTemplate.query("SELECT * FROM employee", new NestedRowMapper(Employee2.class));
 
         return ResponseEntity.ok().body(employees);
     }
