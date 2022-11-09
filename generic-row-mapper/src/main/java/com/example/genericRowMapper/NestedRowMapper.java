@@ -1,6 +1,5 @@
 package com.example.genericRowMapper;
 
-import com.example.genericRowMapper.exception.GenericRowMapperException;
 import org.springframework.beans.*;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
